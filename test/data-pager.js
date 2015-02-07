@@ -16,8 +16,8 @@ suite('data-pager', function() {
         var cases = [
             {
                 page: 1,
-                first: 0,
-                last: 2,
+                firstEntry: 1,
+                lastEntry: 3,
                 entries: 3,
                 skip: 0,
                 previous: null,
@@ -27,8 +27,8 @@ suite('data-pager', function() {
             },
             {
                 page: 2,
-                first: 3,
-                last: 5,
+                firstEntry: 4,
+                lastEntry: 6,
                 entries: 3,
                 skip: 3,
                 previous: 1,
@@ -38,8 +38,8 @@ suite('data-pager', function() {
             },
             {
                 page: 3,
-                first: 6,
-                last: 8,
+                firstEntry: 7,
+                lastEntry: 9,
                 entries: 3,
                 skip: 6,
                 previous: 2,
@@ -49,8 +49,8 @@ suite('data-pager', function() {
             },
             {
                 page: 4,
-                first: 9,
-                last: 9,
+                firstEntry: 10,
+                lastEntry: 10,
                 entries: 1,
                 skip: 9,
                 previous: 3,
@@ -64,8 +64,10 @@ suite('data-pager', function() {
             pager.page = testCase.page;
 
             assert.equal(pager.page, testCase.page);
-            assert.equal(pager.firstEntry, testCase.first);
-            assert.equal(pager.lastEntry, testCase.last);
+            assert.equal(pager.first, 1);
+            assert.equal(pager.last, 4);
+            assert.equal(pager.firstEntry, testCase.firstEntry);
+            assert.equal(pager.lastEntry, testCase.lastEntry);
             assert.equal(pager.previous, testCase.previous);
             assert.equal(pager.next, testCase.next);
             assert.equal(pager.skip, testCase.skip);
@@ -87,19 +89,20 @@ suite('data-pager', function() {
 
             assert.equal(pager.total, total, 'total: value was set in constructor');
             assert.equal(pager.perpage, perpage, 'perpage: value was set in constructor');
+            assert.equal(pager.first, 1);
             assert.equal(pager.last, Math.max(1, last % 1 === 0 ? last : parseInt(last) + 1));
 
             for (var i = 0; i < pager.last; i++) {
                 pager.page = i + 1;
 
                 var page = i + 1,
-                    first = (i * perpage),
-                    last = Math.min(pager.total, page * perpage) - 1,
+                    firstEntry = (i * perpage) + 1,
+                    lastEntry = Math.min(pager.total, page * perpage),
                     entries = (page * perpage >= total) ? total % perpage : perpage;
 
                 assert.equal(pager.page, page);
-                assert.equal(pager.firstEntry, first);
-                assert.equal(pager.lastEntry, last);
+                assert.equal(pager.firstEntry, firstEntry);
+                assert.equal(pager.lastEntry, lastEntry);
                 assert.equal(pager.previous, i || null);
                 assert.equal(pager.next, page < pager.last ? page + 1 : null);
                 assert.equal(pager.skip, i * perpage);
